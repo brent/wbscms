@@ -1,0 +1,7 @@
+Posts get thier date from the folders they're in.
+
+If you have an article called hello_world.md and it was written on Feb. 12th, 2015 you would add it to the following path (creating directories when necessary):
+
+/posts/2015/02/12/hello_world.md
+
+The leading zero in months is important--don't forget it.
