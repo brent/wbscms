@@ -1,0 +1,29 @@
+body {
+	background: url('../img/2012_tile.png') left -3% repeat-y #333;
+}
+
+#wrapper {
+	width: 940px;
+	padding: 0 10px;
+}
+
+div.article {
+	width: 560px;
+	padding: 80px;
+	color: #fff;
+	font: 24px/50px Georgia, sans-serif;
+	margin-left: 360px;
+}
+
+div.article p {
+	margin-bottom: 100px;
+}
+
+.big_text {
+	font-size: 48px;
+	line-height: 1.25;
+}
+
+.dark_blue {
+	color: #52657d;
+}
