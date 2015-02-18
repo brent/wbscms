@@ -1,2 +1,2 @@
-posts/*
-!posts/README
+public/posts/*
+!public/posts/README
