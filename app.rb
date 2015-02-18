@@ -1,7 +1,9 @@
 require 'sinatra'
 
+set :posts, "public/posts"
+
 get '/' do
-  all_posts = Dir.glob("public/posts/*/*/*/*")
+  all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
 
   @posts = []
   all_posts.each do |path|
@@ -20,24 +22,37 @@ get '/' do
     end
   end
 
-  @posts.each { |post| puts "XXX: #{post}" }
   erb :index, locals: { posts: @posts }
 end
 
 get '/:year/:month/:day/:title' do
-  if File.directory? "public/posts/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}"
-    # send_file "public/posts/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/index.html"
-    redirect "posts/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/index.html"
+  if File.directory? "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}"
+    @post = ""
+    File.foreach("#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/index.html") do |line|
+      if line.match("href=|src=")
+        pieces = line.match(/(.*href=")(.*)(".*)/)
+        line = pieces[1] + "#{params[:title]}/#{pieces[2]}" + pieces[3]
+      end
+      @post << line
+    end
   else
     require 'redcarpet'
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 
     @post = ""
-    File.foreach("public/posts/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}.md") do |line|
+    File.foreach("#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}.md") do |line|
       @post << line
     end
-    @parsed = markdown.render(@post)
+    @post = markdown.render(@post)
+  end
 
-    erb :post, locals: { post: @parsed }
+  erb :post, locals: { post: @post }
+end
+
+get '/:year/:month/:day/:title/:asset/:file' do
+  asset_types = %w{css img js}
+
+  if asset_types.include? params[:asset]
+    send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
   end
 end
