@@ -54,9 +54,3 @@ get '/:year/:month/:day/:title/:asset/:file' do
     send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
   end
 end
-
-get '/public/:asset/:file' do
-  if settings.asset_types.include? params[:asset]
-    send_file "/public/#{params[:asset]}/#{params[:file]}"
-  end
-end

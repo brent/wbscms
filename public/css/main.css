@@ -43,20 +43,14 @@ img {
 }
 
 .post {
+  background: #fff;
+  color: #444;
   font-family: "Open Sans Condensed", sans-serif;
+  font-size: 77px;
   font-weight: 700;
+  padding: 50px 0;
 }
 
 .post h2 {
   line-height: 1.15em;
-}
-
-.post {
-  font-size: 77px;
-  background: #fff;
-  padding: 50px 0;
-}
-
-.post {
-  color: #aaa;
 }
