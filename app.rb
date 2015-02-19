@@ -33,6 +33,8 @@ get '/:year/:month/:day/:title' do
       end
       @post << line
     end
+
+    erb :post, locals: { post: @post }, layout: false
   else
     require 'redcarpet'
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
@@ -42,13 +44,19 @@ get '/:year/:month/:day/:title' do
       @post << line
     end
     @post = markdown.render(@post)
-  end
 
-  erb :post, locals: { post: @post }
+    erb :post, locals: { post: @post }
+  end
 end
 
 get '/:year/:month/:day/:title/:asset/:file' do
   if settings.asset_types.include? params[:asset]
     send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
+  end
+end
+
+get '/public/:asset/:file' do
+  if settings.asset_types.include? params[:asset]
+    send_file "/public/#{params[:asset]}/#{params[:file]}"
   end
 end
