@@ -4,6 +4,7 @@ set :posts, "public/posts"
 
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
+  all_posts.reverse!
 
   @posts = []
   all_posts.each do |path|
