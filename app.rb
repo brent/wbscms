@@ -1,6 +1,7 @@
 require 'sinatra'
 
 set :posts, "public/posts"
+set :asset_types, %w{css img js}
 
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
@@ -11,15 +12,9 @@ get '/' do
     path['public/posts/'] = ''
 
     if File.directory? path
-      @posts.push(
-        { path: path,
-          title: File.basename(path) }
-      )
+      @posts.push({ path: path, title: File.basename(path) })
     else
-      @posts.push(
-        { path: path.split('.')[0],
-          title: File.basename(path, File.extname(path)) }
-      )
+      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)) })
     end
   end
 
@@ -27,9 +22,11 @@ get '/' do
 end
 
 get '/:year/:month/:day/:title' do
-  if File.directory? "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}"
+  post_dir = "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}"
+
+  if File.directory? post_dir
     @post = ""
-    File.foreach("#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/index.html") do |line|
+    File.foreach("#{post_dir}/index.html") do |line|
       if line.match("href=|src=")
         pieces = line.match(/(.*href=")(.*)(".*)/)
         line = pieces[1] + "#{params[:title]}/#{pieces[2]}" + pieces[3]
@@ -41,7 +38,7 @@ get '/:year/:month/:day/:title' do
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 
     @post = ""
-    File.foreach("#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}.md") do |line|
+    File.foreach("#{post_dir}.md") do |line|
       @post << line
     end
     @post = markdown.render(@post)
@@ -51,9 +48,7 @@ get '/:year/:month/:day/:title' do
 end
 
 get '/:year/:month/:day/:title/:asset/:file' do
-  asset_types = %w{css img js}
-
-  if asset_types.include? params[:asset]
+  if settings.asset_types.include? params[:asset]
     send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
   end
 end
