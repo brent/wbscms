@@ -1,7 +1,12 @@
 require 'sinatra'
+require 'sinatra/reloader' if development?
+require 'redcarpet'
+require 'date'
 
-set :posts, "public/posts"
-set :asset_types, %w{css img js}
+configure do
+  set :posts, "public/posts"
+  set :asset_types, %w{css img js}
+end
 
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
@@ -10,15 +15,19 @@ get '/' do
   @posts = []
   all_posts.each do |path|
     path['public/posts/'] = ''
+    parts = path.match(/^(\d*)\/(\d*)\/(\d*)/)
+    @date = "#{parts[2]}/#{parts[3]}/#{parts[1]}"
+    # @date = Date.parse("#{parts[2]}/#{parts[3]}/#{parts[1]}")
+    # @date.strftime('%b %e, %Y')
 
     if File.directory? path
-      @posts.push({ path: path, title: File.basename(path) })
+      @posts.push({ path: path, title: File.basename(path), date: @date })
     else
-      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)) })
+      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)), date: @date })
     end
   end
 
-  erb :index, locals: { posts: @posts }
+  erb :index, locals: { posts: @posts }, layout: false
 end
 
 get '/:year/:month/:day/:title' do
@@ -34,9 +43,8 @@ get '/:year/:month/:day/:title' do
       @post << line
     end
 
-    erb :post, locals: { post: @post }, layout: false
+    erb :html_post, locals: { post: @post }, layout: false
   else
-    require 'redcarpet'
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
 
     @post = ""
@@ -45,7 +53,7 @@ get '/:year/:month/:day/:title' do
     end
     @post = markdown.render(@post)
 
-    erb :post, locals: { post: @post }
+    erb :text_post, locals: { post: @post }, layout: false
   end
 end
 
