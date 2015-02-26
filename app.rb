@@ -33,6 +33,8 @@ get '/:year/:month/:day/:title' do
       end
       @post << line
     end
+
+    erb :post, locals: { post: @post }, layout: false
   else
     require 'redcarpet'
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
@@ -42,9 +44,9 @@ get '/:year/:month/:day/:title' do
       @post << line
     end
     @post = markdown.render(@post)
-  end
 
-  erb :post, locals: { post: @post }
+    erb :post, locals: { post: @post }
+  end
 end
 
 get '/:year/:month/:day/:title/:asset/:file' do
