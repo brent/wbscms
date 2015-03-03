@@ -1,14 +1,10 @@
-<%= erb :_header %>
+<% @posts.each do |post| %>
 
-  <% @posts.each do |post| %>
+<div class="post">
+  <div class="inner">
+    <h2><a href="<%= post[:path] %>"><%= post[:title].capitalize %></a></h2>
+    <p class="date"><%= post[:date] %></p>
+  </div>
+</div><!-- END .post -->
 
-  <div class="post">
-    <div class="inner">
-      <h2><a href="<%= post[:path] %>"><%= post[:title].capitalize %></a></h2>
-      <p class="date"><%= post[:date] %></p>
-    </div>
-  </div><!-- END .post -->
-
-  <% end %>
-
-<%= erb :_footer %>
+<% end %>
