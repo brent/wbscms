@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>What Brent Say</title>
+    <link href="<%= url('css/reset.css') %>" rel="stylesheet" type="text/css" />
+    <link href="<%= url('css/main.css') %>" rel="stylesheet" type="text/css" />
+    <% if defined? type %>
+      <% if type == :text_post %>
+        <link href="<%= url('css/text_post.css') %>" rel="stylesheet" type="text/css" />
+      <% end %>
+    <% end %>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <div class="inner">
+           <h1 class="logo"></h1>
+        </div><!-- END .inner -->
+      </div><!-- END .header -->

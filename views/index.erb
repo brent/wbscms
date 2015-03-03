@@ -1,29 +1,14 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>What Brent Say</title>
-    <link href="<%= url('css/reset.css') %>" rel="stylesheet" type="text/css" />
-    <link href="<%= url('css/main.css') %>" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <div class="header">
-        <div class="inner">
-           <h1 class="logo"></h1>
-        </div><!-- END .inner -->
-      </div><!-- END .header -->
+<%= erb :_header %>
 
-      <% @posts.each do |post| %>
+  <% @posts.each do |post| %>
 
-      <div class="post">
-        <div class="inner">
-          <h2><a href="<%= post[:path] %>"><%= post[:title].capitalize %></a></h2>
-          <h3 class="date"><%= post[:date] %></h3>
-        </div>
-      </div><!-- END .post -->
+  <div class="post">
+    <div class="inner">
+      <h2><a href="<%= post[:path] %>"><%= post[:title].capitalize %></a></h2>
+      <p class="date"><%= post[:date] %></p>
+    </div>
+  </div><!-- END .post -->
 
-      <% end %>
+  <% end %>
 
-    </div><!-- END #wrapper -->
-  </body>
-</html>
+<%= erb :_footer %>

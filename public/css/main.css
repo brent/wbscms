@@ -1,5 +1,6 @@
 body {
   background: #fafafa;
+  color: #333;
   font-family: Lato, sans-serif;
   font-size: 18px;
 }
@@ -13,40 +14,48 @@ img {
   max-width: 100%;
 }
 
+h1, .post h2 {
+  color: #333;
+  font-family: Merriweather, serif;
+  font-size: 3.33em;
+  font-weight: 900;
+  margin: 10px 0 40px;
+}
+
+.post h2 {
+  margin-bottom: 10px;
+}
+
 .logo {
-  background: url('/img/new_logo@2x.png') no-repeat center;
+  background: url('/img/logo_125@2x.png') no-repeat center;
   background-size: 100%;
-  height: 71px;
+  height: 56px;
   text-indent: -9999px;
-  width: 159px;
+  width: 125px;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 33.5em;
 }
 
 .wrapper > div .inner {
   display: block;
   margin: 0 auto;
-  padding: 0 10px;
-  width: 940px;
+  position: relative;
 }
 
 .header {
-  background: #222;
-  margin-bottom: 50px;
-  padding: 50px 0;
+  margin: 30px 0;
 }
 
 .date {
-  font-size: 20px;
-  font-weight: 300;
+  font-weight: 500;
+  color: #ccc;
 }
 
 .post {
-  font-size: 72px;
-  font-weight: 700;
   margin-bottom: 10px;
   padding: 50px 0;
   width: 100%;
-}
-
-.post h2 {
-  line-height: 1.15em;
 }

@@ -17,13 +17,13 @@ get '/' do
     path['public/posts/'] = ''
     parts = path.match(/^(\d*)\/(\d*)\/(\d*)/)
     @date = "#{parts[2]}/#{parts[3]}/#{parts[1]}"
-    # @date = Date.parse("#{parts[2]}/#{parts[3]}/#{parts[1]}")
+    # @date = Date.parse(@date)
     # @date.strftime('%b %e, %Y')
 
     if File.directory? path
       @posts.push({ path: path, title: File.basename(path), date: @date })
     else
-      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)), date: @date })
+      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)).gsub(/-/, ' '), date: @date })
     end
   end
 

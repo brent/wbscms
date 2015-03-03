@@ -1,27 +1,16 @@
-body {
-  background: #fafafa;
-}
-
 .wrapper {
-  color: #444;
   font-family: Lato, sans-serif;
-  font-size: 18px;
-  line-height: 1.75em;
-  margin: 100px auto 60px;
-  width: 500px;
+  margin: 30px auto 60px;
 }
 
-h1 {
-  font-size: 60px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  margin: 10px 0 40px;
+.header {
+  margin-bottom: 100px;
 }
 
 p {
-  font-family: Georgia, serif;
-  font-size: 20px;
   color: #777;
+  font-size: 1.25em;
+  line-height: 1.75em;
   margin-bottom: 40px;
 }
 
