@@ -27,7 +27,7 @@ get '/' do
     end
   end
 
-  erb :index, locals: { posts: @posts }, layout: false
+  erb :index, locals: { posts: @posts }
 end
 
 get '/:year/:month/:day/:title' do
@@ -53,7 +53,7 @@ get '/:year/:month/:day/:title' do
     end
     @post = markdown.render(@post)
 
-    erb :text_post, locals: { post: @post }, layout: false
+    erb :text_post, locals: { post: @post, type: :text_post }
   end
 end
 
