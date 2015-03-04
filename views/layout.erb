@@ -1,3 +1,4 @@
-<%= erb :_header %>
-    <%= yield %>
+<% @type = type if defined? type %>
+<%= erb :_header, locals: { type: @type } %>
+  <%= yield %>
 <%= erb :_footer %>
