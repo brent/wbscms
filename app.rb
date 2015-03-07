@@ -2,10 +2,29 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'redcarpet'
 require 'date'
+require 'data_mapper'
 
 configure do
+  set :root, File.dirname(File.expand_path(__FILE__))
   set :posts, "public/posts"
   set :asset_types, %w{css img js}
+
+  DataMapper.setup(:default, "sqlite://#{settings.root}/db/wbscms.db")
+
+  class Admin
+    include DataMapper::Resource
+
+    property :username,  String, key: true, default: "admin"
+    property :password,  String, default: "password"
+    property :firstname, String
+    property :lastname,  String
+  end
+
+  DataMapper.finalize
+  DataMapper.auto_migrate!
+  DataMapper.auto_upgrade!
+
+  Admin.create()
 end
 
 get '/' do
@@ -23,7 +42,11 @@ get '/' do
     if File.directory? path
       @posts.push({ path: path, title: File.basename(path), date: @date })
     else
-      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)).gsub(/-/, ' '), date: @date })
+      @title = File.basename(path, File.extname(path))
+      @title.gsub!(/-/, " ")
+      @title.split.each { |word| word.capitalize! }.join(" ")
+      # why doens't above work?
+      @posts.push({ path: path.split('.')[0], title: @title, date: @date })
     end
   end
 
@@ -61,4 +84,7 @@ get '/:year/:month/:day/:title/:asset/:file' do
   if settings.asset_types.include? params[:asset]
     send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
   end
+end
+
+get '/admin' do
 end
