@@ -60,6 +60,8 @@ GEM
     rack (1.6.0)
     rack-protection (1.5.3)
       rack
+    rack_csrf (2.5.0)
+      rack (>= 1.1.0)
     redcarpet (3.2.2)
     sinatra (1.4.5)
       rack (~> 1.4)
@@ -75,5 +77,6 @@ PLATFORMS
 DEPENDENCIES
   data_mapper
   dm-sqlite-adapter
+  rack_csrf
   redcarpet
   sinatra

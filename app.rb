@@ -3,11 +3,14 @@ require 'sinatra/reloader' if development?
 require 'redcarpet'
 require 'date'
 require 'data_mapper'
+require 'rack/csrf'
 
 configure do
   set :root, File.dirname(File.expand_path(__FILE__))
   set :posts, "public/posts"
   set :asset_types, %w{css img js}
+
+  use Rack::Csrf, raise: true
 
   DataMapper.setup(:default, "sqlite://#{settings.root}/db/wbscms.db")
 
@@ -19,6 +22,9 @@ configure do
     property :password,  String, default: "password"
     property :firstname, String
     property :lastname,  String
+
+    def authenticate
+    end
   end
 
   DataMapper.finalize
@@ -29,7 +35,15 @@ configure do
 end
 
 helpers do
-  def is_logged_in?(user)
+  def is_logged_in?
+  end
+
+  def csrf_tag
+    Rack::Csrf.csrf_tag(env)
+  end
+
+  def csrf_token
+    Rack::Csrf.csrf_token(env)
   end
 end
 

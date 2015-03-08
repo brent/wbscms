@@ -1,4 +1,6 @@
 <form action="<%= url('admin/login') %>" method="POST">
+  <%= csrf_tag %>
+
   <label for="username">Username</label>
   <input id="username" name="username" type="text" placeholder="username" />
 
