@@ -14,6 +14,7 @@ configure do
   class Admin
     include DataMapper::Resource
 
+    property :id,        Serial
     property :username,  String, key: true, default: "admin"
     property :password,  String, default: "password"
     property :firstname, String
@@ -26,6 +27,13 @@ configure do
 
   Admin.create()
 end
+
+helpers do
+  def is_logged_in?(user)
+  end
+end
+
+enable :sessions
 
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
@@ -87,4 +95,11 @@ get '/:year/:month/:day/:title/:asset/:file' do
 end
 
 get '/admin' do
+  erb :admin
+end
+
+post '/admin/login' do
+  @user = Admin.first(username: params[:username])
+  puts "---#{@user.username}/#{@user.password}---"
+  erb :admin
 end
