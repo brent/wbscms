@@ -3,12 +3,6 @@ require 'sinatra/reloader' if development?
 require 'redcarpet'
 require 'date'
 
-configure do
-  set :public_folder, "public"
-  set :posts, "#{settings.public_folder}/posts"
-  set :asset_types, %w{css img js}
-end
-
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
   all_posts.reverse!
