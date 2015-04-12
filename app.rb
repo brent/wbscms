@@ -7,7 +7,8 @@ require 'rack/csrf'
 
 configure do
   set :root, File.dirname(File.expand_path(__FILE__))
-  set :posts, "public/posts"
+  set :public_folder, "public"
+  set :posts, "#{settings.public_folder}/posts"
   set :asset_types, %w{css img js}
 
   use Rack::Csrf, raise: true
@@ -81,9 +82,12 @@ get '/:year/:month/:day/:title' do
   if File.directory? post_dir
     @post = ""
     File.foreach("#{post_dir}/index.html") do |line|
-      if line.match("href=|src=")
-        pieces = line.match(/(.*href=")(.*)(".*)/)
-        line = pieces[1] + "#{params[:title]}/#{pieces[2]}" + pieces[3]
+      if line.match("href=|src=") && !line.match("href=\"http|href=\"www|src=\"http|src=\"www")
+        pieces = line.match(/(.*[href=|src=]")(.*)(".*)/)
+        unless pieces.nil?
+          puts "\n\n#{pieces}\n#{pieces.length}\n"
+          line = pieces[1] + "#{params[:title]}/#{pieces[2]}" + pieces[3]
+        end
       end
       @post << line
     end
@@ -102,9 +106,9 @@ get '/:year/:month/:day/:title' do
   end
 end
 
-get '/:year/:month/:day/:title/:asset/:file' do
-  if settings.asset_types.include? params[:asset]
-    send_file "#{settings.posts}/#{params[:year]}/#{params[:month]}/#{params[:day]}/#{params[:title]}/#{params[:asset]}/#{params[:file]}"
+get %r{(\d{4})\/(\d{2})\/(\d{2})\/(.*)\/(\w*)\/(\w*)\.(\w*)} do
+  if settings.asset_types.include? params[:captures][4]
+    send_file "#{settings.posts}/#{params[:captures][0]}/#{params[:captures][1]}/#{params[:captures][2]}/#{params[:captures][3]}/#{params[:captures][4]}/#{params[:captures][5]}.#{params[:captures][6]}"
   end
 end
 
