@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'redcarpet'
-require 'date'
 
 get '/' do
   all_posts = Dir.glob("#{settings.posts}/*/*/*/*")
@@ -12,13 +11,11 @@ get '/' do
     path['public/posts/'] = ''
     parts = path.match(/^(\d*)\/(\d*)\/(\d*)/)
     @date = "#{parts[2]}/#{parts[3]}/#{parts[1]}"
-    # @date = Date.parse(@date)
-    # @date.strftime('%b %e, %Y')
 
     if File.directory? path
       @posts.push({ path: path, title: File.basename(path), date: @date })
     else
-      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)).gsub(/-/, ' '), date: @date })
+      @posts.push({ path: path.split('.')[0], title: File.basename(path, File.extname(path)).gsub(/-/, ' ').split.each { |w| w.capitalize! }.join(' '), date: @date })
     end
   end
 
@@ -56,6 +53,13 @@ get '/:year/:month/:day/:title' do
 end
 
 get %r{(\d{4})\/(\d{2})\/(\d{2})\/(.*)\/(\w*)\/(\w*)\.(\w*)} do
+  # params[:captures][0] - year
+  # params[:captures][1] - month
+  # params[:captures][2] - day
+  # params[:captures][3] - title
+  # params[:captures][4] - asset
+  # params[:captures][5] - asset name
+  # params[:captures][6] - asset extension
   if settings.asset_types.include? params[:captures][4]
     send_file "#{settings.posts}/#{params[:captures][0]}/#{params[:captures][1]}/#{params[:captures][2]}/#{params[:captures][3]}/#{params[:captures][4]}/#{params[:captures][5]}.#{params[:captures][6]}"
   end
