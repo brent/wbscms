@@ -1,2 +1,3 @@
+.ruby-version
 public/posts/*
 !public/posts/README
